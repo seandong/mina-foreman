@@ -1,6 +1,6 @@
 set :foreman_app, -> { "#{fetch(:domain)}_#{fetch(:rails_env)}" }
 set :foreman_user, -> { fetch(:user) }
-set :foreman_log,  -> { "#{fetch(:deploy_to)}/#{fetch(:shared_path)}/log" }
+set :foreman_log,  -> { "#{fetch(:shared_path)}/log" }
 set :foreman_sudo, true
 set :foreman_format, 'upstart'
 set :foreman_location, '/etc/init'
@@ -10,11 +10,11 @@ namespace :foreman do
   desc 'Export the Procfile to Ubuntu upstart scripts'
   task :export do
     sudo_cmd = "sudo" if fetch(:foreman_sudo)
-    export_cmd = "#{sudo_cmd} bundle exec foreman export #{fetch(:foreman_format)} #{fetch(:foreman_location)} -a #{fetch(:foreman_app)} -u #{fetch(:foreman_user)} -d #{fetch(:deploy_to)}/#{fetch(:current_path)} -l #{fetch(:foreman_log)} -f #{fetch(:foreman_procfile)}"
+    export_cmd = "#{sudo_cmd} bundle exec foreman export #{fetch(:foreman_format)} #{fetch(:foreman_location)} -a #{fetch(:foreman_app)} -u #{fetch(:foreman_user)} -d #{fetch(:current_path)} -l #{fetch(:foreman_log)} -f #{fetch(:foreman_procfile)}"
 
     command %{
       echo "-----> Exporting foreman procfile for #{fetch(:foreman_app)}"
-      #{echo_cmd %[cd #{fetch(:deploy_to)}/#{fetch(:current_path)} ; #{export_cmd}]}
+      #{echo_cmd %[cd #{fetch(:current_path)} ; #{export_cmd}]}
     }
   end
 
